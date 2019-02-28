@@ -161,6 +161,7 @@ void loop()
     int m3 = (int)m1 - 48;
     int m4 = (int)m2 - 48;
     minData = m3 * 10 + m4;
+    input = "";
     Serial.println(comMsg);
     Serial.println(dayOfWeek);
     Serial.println(clockData);
@@ -175,20 +176,20 @@ void loop()
       {
 
         if (numberOfAlarms[0] == 0) {
-
+         
           clocksMon[0] = clockData;
           minMon[0] = minData;
+          numberOfAlarms[0] = numberOfAlarms[0] + 1; 
 
         }
         else
         {
           for (int i = 0; i < numberOfAlarms[0]; i++)
           {
-            if (clocksMon[numberOfAlarms[0]] == clockData )
+            if (clocksMon[i] == clockData )
             {
-              if (minMon[numberOfAlarms[0]] == minData)
+              if (minMon[i] == minData)
               {
-
                 exist = true;
                 digitalWrite(buzzer, LOW); // Buzzer
                 delay(1000);
@@ -213,12 +214,12 @@ void loop()
         {
           for (int i = 0; i < numberOfAlarms[0]; i++)
           {
-            if (clocksMon[numberOfAlarms[0]] == clockData )
+            if (clocksMon[i] == clockData )
             {
-              if (minMon[numberOfAlarms[0]] == minData )
+              if (minMon[i] == minData )
               {
-                clocksMon[numberOfAlarms[0]] = "";
-                minMon[numberOfAlarms[0]] = "";
+                clocksMon[i] = 0;
+                minMon[i] = 0;
                 numberOfAlarms[0] = numberOfAlarms[0] - 1;
                 break;
               }
@@ -231,34 +232,389 @@ void loop()
     }
     else if (dayOfWeek == 2)
     {
-      alarmSettings(clocksTue, minTue, 1);
+      
+      exist = false;
+      // TODO: ARRAY LIMIT REACHED ERROR v2
+      if (comMsg == 'A')
+      {
+
+        if (numberOfAlarms[1] == 0) {
+         
+          clocksTue[0] = clockData;
+          minTue[0] = minData;
+          numberOfAlarms[1] = numberOfAlarms[1] + 1; 
+
+        }
+        else
+        {
+          for (int i = 0; i < numberOfAlarms[1]; i++)
+          {
+            if (clocksTue[i] == clockData )
+            {
+              if (minTue[i] == minData)
+              {
+                exist = true;
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+              }
+            }
+          }
+          if (!exist)
+          {
+            clocksTue[numberOfAlarms[1]] = clockData;
+            minTue[numberOfAlarms[1]] = minData;
+            numberOfAlarms[1] = numberOfAlarms[1] + 1;
+          }
+        }
+      }
+      else if (comMsg == 'D')
+      {
+        if (numberOfAlarms[1] != 0)
+        {
+          for (int i = 0; i < numberOfAlarms[1]; i++)
+          {
+            if (clocksTue[i] == clockData )
+            {
+              if (minTue[i] == minData )
+              {
+                clocksTue[i] = 0;
+                minTue[i] = 0;
+                numberOfAlarms[1] = numberOfAlarms[1] - 1;
+                break;
+              }
+            }
+          }
+          // TODO: DELETE NOTHING ERROR v2
+        }
+        // TODO: NOTHING TO DELETE ERROR v2
+      }
     }
     else if (dayOfWeek == 3)
     {
-      alarmSettings(clocksWed, minWed, 2);
+      
+      exist = false;
+      // TODO: ARRAY LIMIT REACHED ERROR v2
+      if (comMsg == 'A')
+      {
+
+        if (numberOfAlarms[2] == 0) {
+         
+          clocksWed[0] = clockData;
+          minWed[0] = minData;
+          numberOfAlarms[2] = numberOfAlarms[2] + 1; 
+
+        }
+        else
+        {
+          for (int i = 0; i < numberOfAlarms[2]; i++)
+          {
+            if (clocksWed[i] == clockData )
+            {
+              if (minWed[i] == minData)
+              {
+                exist = true;
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+              }
+            }
+          }
+          if (!exist)
+          {
+            clocksWed[numberOfAlarms[2]] = clockData;
+            minWed[numberOfAlarms[2]] = minData;
+            numberOfAlarms[2] = numberOfAlarms[2] + 1;
+          }
+        }
+      }
+      else if (comMsg == 'D')
+      {
+        if (numberOfAlarms[2] != 0)
+        {
+          for (int i = 0; i < numberOfAlarms[2]; i++)
+          {
+            if (clocksWed[i] == clockData )
+            {
+              if (minWed[i] == minData )
+              {
+                clocksWed[i] = 0;
+                minWed[i] = 0;
+                numberOfAlarms[2] = numberOfAlarms[2] - 1;
+                break;
+              }
+            }
+          }
+          // TODO: DELETE NOTHING ERROR v2
+        }
+        // TODO: NOTHING TO DELETE ERROR v2
+      }
     }
     else if (dayOfWeek == 4)
     {
-      alarmSettings(clocksThu, minThu, 3);
+      
+      exist = false;
+      // TODO: ARRAY LIMIT REACHED ERROR v2
+      if (comMsg == 'A')
+      {
+
+        if (numberOfAlarms[3] == 0) {
+         
+          clocksThu[0] = clockData;
+          minThu[0] = minData;
+          numberOfAlarms[3] = numberOfAlarms[3] + 1; 
+
+        }
+        else
+        {
+          for (int i = 0; i < numberOfAlarms[3]; i++)
+          {
+            if (clocksThu[i] == clockData )
+            {
+              if (minThu[i] == minData)
+              {
+                exist = true;
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+              }
+            }
+          }
+          if (!exist)
+          {
+            clocksThu[numberOfAlarms[3]] = clockData;
+            minThu[numberOfAlarms[3]] = minData;
+            numberOfAlarms[3] = numberOfAlarms[3] + 1;
+          }
+        }
+      }
+      else if (comMsg == 'D')
+      {
+        if (numberOfAlarms[3] != 0)
+        {
+          for (int i = 0; i < numberOfAlarms[3]; i++)
+          {
+            if (clocksThu[i] == clockData )
+            {
+              if (minThu[i] == minData )
+              {
+                clocksThu[i] = 0;
+                minThu[i] = 0;
+                numberOfAlarms[3] = numberOfAlarms[3] - 1;
+                break;
+              }
+            }
+          }
+          // TODO: DELETE NOTHING ERROR v2
+        }
+        // TODO: NOTHING TO DELETE ERROR v2
+      }
     }
     else if (dayOfWeek == 5)
     {
-      alarmSettings(clocksFri, minFri, 4);
+      
+      exist = false;
+      // TODO: ARRAY LIMIT REACHED ERROR v2
+      if (comMsg == 'A')
+      {
+
+        if (numberOfAlarms[4] == 0) {
+         
+          clocksFri[0] = clockData;
+          minFri[0] = minData;
+          numberOfAlarms[4] = numberOfAlarms[4] + 1; 
+
+        }
+        else
+        {
+          for (int i = 0; i < numberOfAlarms[4]; i++)
+          {
+            if (clocksFri[i] == clockData )
+            {
+              if (minFri[i] == minData)
+              {
+                exist = true;
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+              }
+            }
+          }
+          if (!exist)
+          {
+            clocksFri[numberOfAlarms[4]] = clockData;
+            minFri[numberOfAlarms[4]] = minData;
+            numberOfAlarms[4] = numberOfAlarms[4] + 1;
+          }
+        }
+      }
+      else if (comMsg == 'D')
+      {
+        if (numberOfAlarms[4] != 0)
+        {
+          for (int i = 0; i < numberOfAlarms[4]; i++)
+          {
+            if (clocksFri[i] == clockData )
+            {
+              if (minFri[i] == minData )
+              {
+                clocksFri[i] = 0;
+                minFri[i] = 0;
+                numberOfAlarms[4] = numberOfAlarms[4] - 1;
+                break;
+              }
+            }
+          }
+          // TODO: DELETE NOTHING ERROR v2
+        }
+        // TODO: NOTHING TO DELETE ERROR v2
+      }
     }
     else if (dayOfWeek == 6)
     {
-      alarmSettings(clocksSat, minSat, 5);
+      
+      exist = false;
+      // TODO: ARRAY LIMIT REACHED ERROR v2
+      if (comMsg == 'A')
+      {
+
+        if (numberOfAlarms[5] == 0) {
+         
+          clocksSat[0] = clockData;
+          minSat[0] = minData;
+          numberOfAlarms[5] = numberOfAlarms[5] + 1; 
+
+        }
+        else
+        {
+          for (int i = 0; i < numberOfAlarms[5]; i++)
+          {
+            if (clocksSat[i] == clockData )
+            {
+              if (minSat[i] == minData)
+              {
+                exist = true;
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+              }
+            }
+          }
+          if (!exist)
+          {
+            clocksSat[numberOfAlarms[5]] = clockData;
+            minSat[numberOfAlarms[5]] = minData;
+            numberOfAlarms[5] = numberOfAlarms[5] + 1;
+          }
+        }
+      }
+      else if (comMsg == 'D')
+      {
+        if (numberOfAlarms[5] != 0)
+        {
+          for (int i = 0; i < numberOfAlarms[5]; i++)
+          {
+            if (clocksSat[i] == clockData )
+            {
+              if (minSat[i] == minData )
+              {
+                clocksSat[i] = 0;
+                minSat[i] = 0;
+                numberOfAlarms[5] = numberOfAlarms[5] - 1;
+                break;
+              }
+            }
+          }
+          // TODO: DELETE NOTHING ERROR v2
+        }
+        // TODO: NOTHING TO DELETE ERROR v2
+      }
     }
     else if (dayOfWeek == 7)
     {
-      alarmSettings(clocksSun, minSun, 6);
+      
+      exist = false;
+      // TODO: ARRAY LIMIT REACHED ERROR v2
+      if (comMsg == 'A')
+      {
+
+        if (numberOfAlarms[6] == 0) {
+         
+          clocksSun[0] = clockData;
+          minSun[0] = minData;
+          numberOfAlarms[6] = numberOfAlarms[6] + 1; 
+
+        }
+        else
+        {
+          for (int i = 0; i < numberOfAlarms[6]; i++)
+          {
+            if (clocksSun[i] == clockData )
+            {
+              if (minSun[i] == minData)
+              {
+                exist = true;
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+              }
+            }
+          }
+          if (!exist)
+          {
+            clocksSun[numberOfAlarms[6]] = clockData;
+            minSun[numberOfAlarms[6]] = minData;
+            numberOfAlarms[6] = numberOfAlarms[6] + 1;
+          }
+        }
+      }
+      else if (comMsg == 'D')
+      {
+        if (numberOfAlarms[6] != 0)
+        {
+          for (int i = 0; i < numberOfAlarms[6]; i++)
+          {
+            if (clocksSun[i] == clockData )
+            {
+              if (minSun[i] == minData )
+              {
+                clocksSun[i] = 0;
+                minSun[i] = 0;
+                numberOfAlarms[0] = numberOfAlarms[0] - 1;
+                break;
+              }
+            }
+          }
+          // TODO: DELETE NOTHING ERROR v2
+        }
+        // TODO: NOTHING TO DELETE ERROR v2
+      }
     }
 
     comMsg = "";
-    dayOfWeek = "";
-    clockData = "";
-    minData = "";
+    dayOfWeek = 0;
+    clockData = 0;
+    minData = 0;
     stringComplete = false;
+    Serial.println("del");
   }
 }
 
