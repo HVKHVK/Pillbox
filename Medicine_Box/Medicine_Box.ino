@@ -27,26 +27,27 @@ const int lightSetting2 = 3;
 const int lightSetting3 = 2;
 const int lightControl = A0;
 
-String comMsg = "";                     // Income from HC-05, DEL or ADD
-String dayOfWeek = "";                  // Day of Week
-String clockData = "";                  // Data of clock
-String minData = "";                    // Data of minute
+char comMsg = "";                     // Income from HC-05, DEL or ADD
+int dayOfWeek;                  // Day of Week
+int clockData = 0;                  // Data of clock
+int minData = 0;                    // Data of minute
+String input = "";
 
-String clocksMon[10];                   // Clocks of Monday
-String clocksTue[10];                   // Clocks of Tuesday
-String clocksWed[10];                   // Clocks of Wednesday
-String clocksThu[10];                   // Clocks of Thursday
-String clocksFri[10];                   // Clocks of Friday
-String clocksSat[10];                   // Clocks of Saturday
-String clocksSun[10];                   // Clocks of Sunday
+int clocksMon[3];                   // Clocks of Monday
+int clocksTue[3];                   // Clocks of Tuesday
+int clocksWed[3];                   // Clocks of Wednesday
+int clocksThu[3];                   // Clocks of Thursday
+int clocksFri[3];                   // Clocks of Friday
+int clocksSat[3];                   // Clocks of Saturday
+int clocksSun[3];                   // Clocks of Sunday
 
-String minMon[10];                   // Minute of Monday
-String minTue[10];                   // Minute of Tuesday
-String minWed[10];                   // Minute of Wednesday
-String minThu[10];                   // Minute of Thursday
-String minFri[10];                   // Minute of Friday
-String minSat[10];                   // Minute of Saturday
-String minSun[10];                   // Minute of Sunday
+int minMon[3];                   // Minute of Monday
+int minTue[3];                   // Minute of Tuesday
+int minWed[3];                   // Minute of Wednesday
+int minThu[3];                   // Minute of Thursday
+int minFri[3];                   // Minute of Friday
+int minSat[3];                   // Minute of Saturday
+int minSun[3];                   // Minute of Sunday
 
 int numberOfAlarms[7] = {0, 0, 0, 0, 0, 0, 0};  // Number of alarms set on Week
 int alarmStatus[7] = {0, 0, 0, 0, 0, 0, 0};  // Number of alarms set on Week
@@ -61,6 +62,7 @@ boolean alarmOn = false;
 void setup()
 {
   Serial.begin(38400);
+  input.reserve(500);
 
   RTC.setRAM(0, (uint8_t *)&startAddr, sizeof(uint16_t));
   RTC.getRAM(54, (uint8_t *)&TimeIsSet, sizeof(uint16_t));
@@ -70,8 +72,8 @@ void setup()
   {
     RTC.stopClock();
 
-    RTC.fillByYMD(2019, 2, 26);
-    RTC.fillByHMS(22, 53, 0);
+    RTC.fillByYMD(2019, 2, 28);
+    RTC.fillByHMS(22, 40, 0);
 
     RTC.setTime();
     TimeIsSet = 0xaa55;
@@ -142,31 +144,112 @@ void loop()
   // Add or delete alarm time
   if (stringComplete)
   {
-    if (dayOfWeek == "MON")
+    comMsg = input.charAt(0);
+    char d1 = input.charAt(2);
+    int d2 = (int)d1 - 48;
+    dayOfWeek = d2;
+
+    char c1 = input.charAt(4);
+    char c2 = input.charAt(5);
+    char m1 = input.charAt(7);
+    char m2 = input.charAt(8);
+
+    int c3 = (int)c1 - 48;
+    int c4 = (int)c2 - 48;
+    clockData = c3 * 10 + c4;
+
+    int m3 = (int)m1 - 48;
+    int m4 = (int)m2 - 48;
+    minData = m3 * 10 + m4;
+    Serial.println(comMsg);
+    Serial.println(dayOfWeek);
+    Serial.println(clockData);
+    Serial.println(minData);
+
+    if (dayOfWeek == 1)
     {
-      alarmSettings(clocksMon, minMon, 0);
+
+      exist = false;
+      // TODO: ARRAY LIMIT REACHED ERROR v2
+      if (comMsg == 'A')
+      {
+
+        if (numberOfAlarms[0] == 0) {
+
+          clocksMon[0] = clockData;
+          minMon[0] = minData;
+
+        }
+        else
+        {
+          for (int i = 0; i < numberOfAlarms[0]; i++)
+          {
+            if (clocksMon[numberOfAlarms[0]] == clockData )
+            {
+              if (minMon[numberOfAlarms[0]] == minData)
+              {
+
+                exist = true;
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
+                delay(1000);
+                digitalWrite(buzzer, LOW); // Buzzer
+                delay(1000);
+              }
+            }
+          }
+          if (!exist)
+          {
+            clocksMon[numberOfAlarms[0]] = clockData;
+            minMon[numberOfAlarms[0]] = minData;
+            numberOfAlarms[0] = numberOfAlarms[0] + 1;
+          }
+        }
+      }
+      else if (comMsg == 'D')
+      {
+        if (numberOfAlarms[0] != 0)
+        {
+          for (int i = 0; i < numberOfAlarms[0]; i++)
+          {
+            if (clocksMon[numberOfAlarms[0]] == clockData )
+            {
+              if (minMon[numberOfAlarms[0]] == minData )
+              {
+                clocksMon[numberOfAlarms[0]] = "";
+                minMon[numberOfAlarms[0]] = "";
+                numberOfAlarms[0] = numberOfAlarms[0] - 1;
+                break;
+              }
+            }
+          }
+          // TODO: DELETE NOTHING ERROR v2
+        }
+        // TODO: NOTHING TO DELETE ERROR v2
+      }
     }
-    else if (dayOfWeek == "TUE")
+    else if (dayOfWeek == 2)
     {
       alarmSettings(clocksTue, minTue, 1);
     }
-    else if (dayOfWeek == "WED")
+    else if (dayOfWeek == 3)
     {
       alarmSettings(clocksWed, minWed, 2);
     }
-    else if (dayOfWeek == "THU")
+    else if (dayOfWeek == 4)
     {
       alarmSettings(clocksThu, minThu, 3);
     }
-    else if (dayOfWeek == "FRI")
+    else if (dayOfWeek == 5)
     {
       alarmSettings(clocksFri, minFri, 4);
     }
-    else if (dayOfWeek == "SAT")
+    else if (dayOfWeek == 6)
     {
       alarmSettings(clocksSat, minSat, 5);
     }
-    else if (dayOfWeek == "SUN")
+    else if (dayOfWeek == 7)
     {
       alarmSettings(clocksSun, minSun, 6);
     }
@@ -185,37 +268,26 @@ void serialEvent()
   while (Serial.available())
   {
     char inChar = (char)Serial.read();
-    minData += inChar;
-    if (inChar == '-')
-    {
-      comMsg = minData.substring(0, (minData.length() - 1));
-      minData = "";
-    }
-    if (inChar == ';')
-    {
-      dayOfWeek = minData.substring(0, (minData.length() - 1));
-      minData = "";
-    }
-    if (inChar == ':')
-    {
-      clockData = minData.substring(0, (minData.length() - 1));
-      minData = "";
-    }
+    input.concat(inChar);
     if (inChar == '!')
     {
       stringComplete = true;
-      minData = minData.substring(0, (minData.length() - 1));
+      break;
     }
   }
 }
 
 // Alarm settings
-void alarmSettings(String hourArray[], String minArray[], int dayNumber)
+void alarmSettings(int hourArray[], int minArray[], int dayNumber)
 {
   exist = false;
   // TODO: ARRAY LIMIT REACHED ERROR v2
-  if (comMsg == "ADD")
+  if (comMsg == 'A')
   {
+    Serial.println("x");
+    Serial.println(hourArray[0]);
+    Serial.println(numberOfAlarms[dayNumber]);
+
     if (numberOfAlarms[dayNumber] == 0) {
       hourArray[0] = clockData;
       minArray[0] = minData;
@@ -270,15 +342,15 @@ void alarmSettings(String hourArray[], String minArray[], int dayNumber)
 }
 
 // Check Alarm
-void checkAlarm(String hourArray[], String minArray[], int dayNumber, int currentHour, int currentMin, int currentSec)
+void checkAlarm(int hourArray[], int minArray[], int dayNumber, int currentHour, int currentMin, int currentSec)
 {
   if (numberOfAlarms[dayNumber] > 0)
   {
     for (int i = 0; i < numberOfAlarms[dayNumber]; i++)
     {
-      if (minArray[i].toInt() == currentMin)
+      if (minArray[i] == currentMin)
       {
-        if (hourArray[i].toInt() == currentHour)
+        if (hourArray[i] == currentHour)
         {
           if (20 <= currentSec <= 40)
           {
