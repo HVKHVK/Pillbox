@@ -27,8 +27,8 @@ const int lightSetting2 = 3;
 const int lightSetting3 = 2;
 const int lightControl = A0;
 
-char comMsg = "";                     // Income from HC-05, DEL or ADD
-int dayOfWeek;                  // Day of Week
+char comMsg = "";                   // Income from HC-05, DEL or ADD
+int dayOfWeek;                      // Day of Week
 int clockData = 0;                  // Data of clock
 int minData = 0;                    // Data of minute
 String input = "";
@@ -108,34 +108,149 @@ void loop()
 {
   RTC.getTime();
 
+  int currentHour = RTC.hour;
+  int currentMin = RTC.minute;
+  int currentSec = RTC.second;
   // Check Alarm
   if (RTC.dow == 1)
   {
-    checkAlarm(clocksMon, minMon, 0, RTC.hour, RTC.minute, RTC.second);
+    if (numberOfAlarms[0] > 0)
+    {
+      for (int i = 0; i < numberOfAlarms[0]; i++)
+      {
+        if (minMon[i] == currentMin)
+        {
+          if (clocksMon[i] == currentHour)
+          {
+            if (20 <= currentSec <= 40)
+            {
+              alarmStatus[0] = 1;
+              break;
+            }
+          }
+        }
+      }
+    }
   }
   else if (RTC.dow == 2)
   {
-    checkAlarm(clocksTue, minTue, 1, RTC.hour, RTC.minute, RTC.second);
+    if (numberOfAlarms[1] > 0)
+    {
+      for (int i = 0; i < numberOfAlarms[1]; i++)
+      {
+        if (minTue[i] == currentMin)
+        {
+          if (clocksTue[i] == currentHour)
+          {
+            if (20 <= currentSec <= 40)
+            {
+              alarmStatus[1] = 1;
+              break;
+            }
+          }
+        }
+      }
+    }
   }
   else if (RTC.dow == 3)
   {
-    checkAlarm(clocksWed, minWed, 2, RTC.hour, RTC.minute, RTC.second);
+    if (numberOfAlarms[2] > 0)
+    {
+      for (int i = 0; i < numberOfAlarms[2]; i++)
+      {
+        if (minWed[i] == currentMin)
+        {
+          if (clocksWed[i] == currentHour)
+          {
+            if (20 <= currentSec <= 40)
+            {
+              alarmStatus[2] = 1;
+              break;
+            }
+          }
+        }
+      }
+    }
   }
   else if (RTC.dow == 4)
   {
-    checkAlarm(clocksThu, minThu, 3, RTC.hour, RTC.minute, RTC.second);
+    if (numberOfAlarms[3] > 0)
+    {
+      for (int i = 0; i < numberOfAlarms[3]; i++)
+      {
+        if (minThu[i] == currentMin)
+        {
+          if (clocksThu[i] == currentHour)
+          {
+            if (20 <= currentSec <= 40)
+            {
+              alarmStatus[3] = 1;
+              break;
+            }
+          }
+        }
+      }
+    }
   }
   else if (RTC.dow == 5)
   {
-    checkAlarm(clocksFri, minFri, 4, RTC.hour, RTC.minute, RTC.second);
+    if (numberOfAlarms[4] > 0)
+    {
+      for (int i = 0; i < numberOfAlarms[4]; i++)
+      {
+        if (minFri[i] == currentMin)
+        {
+          if (clocksFri[i] == currentHour)
+          {
+            if (20 <= currentSec <= 40)
+            {
+              alarmStatus[4] = 1;
+              break;
+            }
+          }
+        }
+      }
+    }
   }
   else if (RTC.dow == 6)
   {
-    checkAlarm(clocksSat, minSat, 5, RTC.hour, RTC.minute, RTC.second);
+    if (numberOfAlarms[5] > 0)
+    {
+      for (int i = 0; i < numberOfAlarms[5]; i++)
+      {
+        if (minSat[i] == currentMin)
+        {
+          if (clocksSat[i] == currentHour)
+          {
+            if (20 <= currentSec <= 40)
+            {
+              alarmStatus[5] = 1;
+              break;
+            }
+          }
+        }
+      }
+    }
   }
   else if (RTC.dow == 7)
   {
-    checkAlarm(clocksSun, minSun, 6, RTC.hour, RTC.minute, RTC.second);
+    if (numberOfAlarms[6] > 0)
+    {
+      for (int i = 0; i < numberOfAlarms[6]; i++)
+      {
+        if (minSun[i] == currentMin)
+        {
+          if (clocksSun[i] == currentHour)
+          {
+            if (20 <= currentSec <= 40)
+            {
+              alarmStatus[6] = 1;
+              break;
+            }
+          }
+        }
+      }
+    }
   }
 
   //Rise alarm
@@ -176,10 +291,10 @@ void loop()
       {
 
         if (numberOfAlarms[0] == 0) {
-         
+
           clocksMon[0] = clockData;
           minMon[0] = minData;
-          numberOfAlarms[0] = numberOfAlarms[0] + 1; 
+          numberOfAlarms[0] = numberOfAlarms[0] + 1;
 
         }
         else
@@ -210,6 +325,7 @@ void loop()
       }
       else if (comMsg == 'D')
       {
+        // TODO: WHEN DELETED MOVE THE ARRAY AND FIX v2
         if (numberOfAlarms[0] != 0)
         {
           for (int i = 0; i < numberOfAlarms[0]; i++)
@@ -232,17 +348,16 @@ void loop()
     }
     else if (dayOfWeek == 2)
     {
-      
+
       exist = false;
       // TODO: ARRAY LIMIT REACHED ERROR v2
       if (comMsg == 'A')
       {
-
         if (numberOfAlarms[1] == 0) {
-         
+
           clocksTue[0] = clockData;
           minTue[0] = minData;
-          numberOfAlarms[1] = numberOfAlarms[1] + 1; 
+          numberOfAlarms[1] = numberOfAlarms[1] + 1;
 
         }
         else
@@ -295,17 +410,17 @@ void loop()
     }
     else if (dayOfWeek == 3)
     {
-      
+
       exist = false;
       // TODO: ARRAY LIMIT REACHED ERROR v2
       if (comMsg == 'A')
       {
 
         if (numberOfAlarms[2] == 0) {
-         
+
           clocksWed[0] = clockData;
           minWed[0] = minData;
-          numberOfAlarms[2] = numberOfAlarms[2] + 1; 
+          numberOfAlarms[2] = numberOfAlarms[2] + 1;
 
         }
         else
@@ -358,17 +473,17 @@ void loop()
     }
     else if (dayOfWeek == 4)
     {
-      
+
       exist = false;
       // TODO: ARRAY LIMIT REACHED ERROR v2
       if (comMsg == 'A')
       {
 
         if (numberOfAlarms[3] == 0) {
-         
+
           clocksThu[0] = clockData;
           minThu[0] = minData;
-          numberOfAlarms[3] = numberOfAlarms[3] + 1; 
+          numberOfAlarms[3] = numberOfAlarms[3] + 1;
 
         }
         else
@@ -421,17 +536,17 @@ void loop()
     }
     else if (dayOfWeek == 5)
     {
-      
+
       exist = false;
       // TODO: ARRAY LIMIT REACHED ERROR v2
       if (comMsg == 'A')
       {
 
         if (numberOfAlarms[4] == 0) {
-         
+
           clocksFri[0] = clockData;
           minFri[0] = minData;
-          numberOfAlarms[4] = numberOfAlarms[4] + 1; 
+          numberOfAlarms[4] = numberOfAlarms[4] + 1;
 
         }
         else
@@ -484,17 +599,17 @@ void loop()
     }
     else if (dayOfWeek == 6)
     {
-      
+
       exist = false;
       // TODO: ARRAY LIMIT REACHED ERROR v2
       if (comMsg == 'A')
       {
 
         if (numberOfAlarms[5] == 0) {
-         
+
           clocksSat[0] = clockData;
           minSat[0] = minData;
-          numberOfAlarms[5] = numberOfAlarms[5] + 1; 
+          numberOfAlarms[5] = numberOfAlarms[5] + 1;
 
         }
         else
@@ -547,17 +662,17 @@ void loop()
     }
     else if (dayOfWeek == 7)
     {
-      
+
       exist = false;
       // TODO: ARRAY LIMIT REACHED ERROR v2
       if (comMsg == 'A')
       {
 
         if (numberOfAlarms[6] == 0) {
-         
+
           clocksSun[0] = clockData;
           minSun[0] = minData;
-          numberOfAlarms[6] = numberOfAlarms[6] + 1; 
+          numberOfAlarms[6] = numberOfAlarms[6] + 1;
 
         }
         else
@@ -629,28 +744,6 @@ void serialEvent()
     {
       stringComplete = true;
       break;
-    }
-  }
-}
-
-// Check Alarm
-void checkAlarm(int hourArray[], int minArray[], int dayNumber, int currentHour, int currentMin, int currentSec)
-{
-  if (numberOfAlarms[dayNumber] > 0)
-  {
-    for (int i = 0; i < numberOfAlarms[dayNumber]; i++)
-    {
-      if (minArray[i] == currentMin)
-      {
-        if (hourArray[i] == currentHour)
-        {
-          if (20 <= currentSec <= 40)
-          {
-            alarmStatus[dayNumber] = 1;
-            break;
-          }
-        }
-      }
     }
   }
 }
