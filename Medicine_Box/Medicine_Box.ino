@@ -52,7 +52,7 @@ int minSun[3];                   // Minute of Sunday
 int numberOfAlarms[7] = {0, 0, 0, 0, 0, 0, 0};  // Number of alarms set on Week
 int alarmStatus[7] = {0, 0, 0, 0, 0, 0, 0};  // Number of alarms set on Week
 
-int delayPeriod = 500;
+int delayPeriod = 250;
 int buttonState = 0;
 
 boolean stringComplete = false;         // When serial message finished
@@ -72,8 +72,8 @@ void setup()
   {
     RTC.stopClock();
 
-    RTC.fillByYMD(2019, 2, 28);
-    RTC.fillByHMS(22, 40, 0);
+    RTC.fillByYMD(2019, 3, 1);
+    RTC.fillByHMS(22, 38, 20);
 
     RTC.setTime();
     TimeIsSet = 0xaa55;
@@ -112,6 +112,7 @@ void loop()
   int currentMin = RTC.minute;
   int currentSec = RTC.second;
   // Check Alarm
+
   if (RTC.dow == 1)
   {
     if (numberOfAlarms[0] > 0)
@@ -122,7 +123,7 @@ void loop()
         {
           if (clocksMon[i] == currentHour)
           {
-            if (20 <= currentSec <= 40)
+            if (40 <= currentSec <= 50)
             {
               alarmStatus[0] = 1;
               break;
@@ -142,7 +143,7 @@ void loop()
         {
           if (clocksTue[i] == currentHour)
           {
-            if (20 <= currentSec <= 40)
+            if (40 <= currentSec <= 50)
             {
               alarmStatus[1] = 1;
               break;
@@ -162,7 +163,7 @@ void loop()
         {
           if (clocksWed[i] == currentHour)
           {
-            if (20 <= currentSec <= 40)
+            if (40 <= currentSec <= 50)
             {
               alarmStatus[2] = 1;
               break;
@@ -182,7 +183,7 @@ void loop()
         {
           if (clocksThu[i] == currentHour)
           {
-            if (20 <= currentSec <= 40)
+            if (40 <= currentSec <= 50)
             {
               alarmStatus[3] = 1;
               break;
@@ -202,7 +203,7 @@ void loop()
         {
           if (clocksFri[i] == currentHour)
           {
-            if (20 <= currentSec <= 40)
+            if (40 <= currentSec <= 50)
             {
               alarmStatus[4] = 1;
               break;
@@ -222,7 +223,7 @@ void loop()
         {
           if (clocksSat[i] == currentHour)
           {
-            if (20 <= currentSec <= 40)
+            if (40 <= currentSec <= 50)
             {
               alarmStatus[5] = 1;
               break;
@@ -242,7 +243,7 @@ void loop()
         {
           if (clocksSun[i] == currentHour)
           {
-            if (20 <= currentSec <= 40)
+            if (40 <= currentSec <= 50)
             {
               alarmStatus[6] = 1;
               break;
@@ -259,6 +260,7 @@ void loop()
   // Add or delete alarm time
   if (stringComplete)
   {
+    // TODO: ABILITY TO GET "5" INSTEAD OF "05"
     comMsg = input.charAt(0);
     char d1 = input.charAt(2);
     int d2 = (int)d1 - 48;
@@ -277,10 +279,10 @@ void loop()
     int m4 = (int)m2 - 48;
     minData = m3 * 10 + m4;
     input = "";
-    Serial.println(comMsg);
-    Serial.println(dayOfWeek);
-    Serial.println(clockData);
-    Serial.println(minData);
+//    Serial.println(comMsg);
+//    Serial.println(dayOfWeek);
+//    Serial.println(clockData);
+//    Serial.println(minData);
 
     if (dayOfWeek == 1)
     {
@@ -312,6 +314,8 @@ void loop()
                 delay(1000);
                 digitalWrite(buzzer, LOW); // Buzzer
                 delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
+
               }
             }
           }
@@ -375,6 +379,8 @@ void loop()
                 delay(1000);
                 digitalWrite(buzzer, LOW); // Buzzer
                 delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
+
               }
             }
           }
@@ -438,6 +444,8 @@ void loop()
                 delay(1000);
                 digitalWrite(buzzer, LOW); // Buzzer
                 delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
+
               }
             }
           }
@@ -501,6 +509,8 @@ void loop()
                 delay(1000);
                 digitalWrite(buzzer, LOW); // Buzzer
                 delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
+
               }
             }
           }
@@ -564,6 +574,7 @@ void loop()
                 delay(1000);
                 digitalWrite(buzzer, LOW); // Buzzer
                 delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
               }
             }
           }
@@ -627,6 +638,7 @@ void loop()
                 delay(1000);
                 digitalWrite(buzzer, LOW); // Buzzer
                 delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
               }
             }
           }
@@ -690,6 +702,8 @@ void loop()
                 delay(1000);
                 digitalWrite(buzzer, LOW); // Buzzer
                 delay(1000);
+                digitalWrite(buzzer, HIGH); // Buzzer
+
               }
             }
           }
@@ -729,7 +743,7 @@ void loop()
     clockData = 0;
     minData = 0;
     stringComplete = false;
-    Serial.println("del");
+//    Serial.println("del");
   }
 }
 
@@ -759,21 +773,32 @@ void riseAlarm()
 
     while (true)
     {
+      digitalWrite(buzzer, LOW); // Buzzer
+      digitalWrite(lightControl, HIGH); // Led
+      delay(delayPeriod);
       buttonState = digitalRead(buttonMon);
       if (buttonState == HIGH)
       {
         // Box Opened Close Alarm
-        alarmStatus[0] == 0;
+        alarmStatus[0] = 0;
         digitalWrite(buzzer, HIGH); // Buzzer
         digitalWrite(lightControl, LOW); // Led
-        delay(10000);
+        delay(40000);
         break;
       }
-      digitalWrite(buzzer, LOW); // Buzzer
-      digitalWrite(lightControl, HIGH); // Led
-      delay(delayPeriod);
       digitalWrite(buzzer, HIGH); // Buzzer
       digitalWrite(lightControl, LOW); // Led
+      delay(delayPeriod);
+      buttonState = digitalRead(buttonMon);
+      if (buttonState == HIGH)
+      {
+        // Box Opened Close Alarm
+        alarmStatus[0] = 0;
+        digitalWrite(buzzer, HIGH); // Buzzer
+        digitalWrite(lightControl, LOW); // Led
+        delay(40000);
+        break;
+      }
     }
   }
   else if (alarmStatus[1] == 1)
@@ -785,21 +810,32 @@ void riseAlarm()
 
     while (true)
     {
+      digitalWrite(buzzer, LOW); // Buzzer
+      digitalWrite(lightControl, HIGH); // Led
+      delay(delayPeriod);
       buttonState = digitalRead(buttonTue);
       if (buttonState == HIGH)
       {
         // Box Opened Close Alarm
-        alarmStatus[1] == 0;
+        alarmStatus[1] = 0;
         digitalWrite(buzzer, HIGH); // Buzzer
         digitalWrite(lightControl, LOW); // Led
-        delay(10000);
+        delay(40000);
         break;
       }
-      digitalWrite(buzzer, LOW); // Buzzer
-      digitalWrite(lightControl, HIGH); // Led
-      delay(delayPeriod);
       digitalWrite(buzzer, HIGH); // Buzzer
       digitalWrite(lightControl, LOW); // Led
+      delay(delayPeriod);
+      buttonState = digitalRead(buttonTue);
+      if (buttonState == HIGH)
+      {
+        // Box Opened Close Alarm
+        alarmStatus[1] = 0;
+        digitalWrite(buzzer, HIGH); // Buzzer
+        digitalWrite(lightControl, LOW); // Led
+        delay(40000);
+        break;
+      }
     }
   }
   else if (alarmStatus[2] == 1)
@@ -811,21 +847,32 @@ void riseAlarm()
 
     while (true)
     {
+      digitalWrite(buzzer, LOW); // Buzzer
+      digitalWrite(lightControl, HIGH); // Led
+      delay(delayPeriod);
       buttonState = digitalRead(buttonWed);
       if (buttonState == HIGH)
       {
         // Box Opened Close Alarm
-        alarmStatus[2] == 0;
+        alarmStatus[2] = 0;
         digitalWrite(buzzer, HIGH); // Buzzer
         digitalWrite(lightControl, LOW); // Led
-        delay(10000);
+        delay(40000);
         break;
       }
-      digitalWrite(buzzer, LOW); // Buzzer
-      digitalWrite(lightControl, HIGH); // Led
-      delay(delayPeriod);
       digitalWrite(buzzer, HIGH); // Buzzer
       digitalWrite(lightControl, LOW); // Led
+      delay(delayPeriod);
+      buttonState = digitalRead(buttonWed);
+      if (buttonState == HIGH)
+      {
+        // Box Opened Close Alarm
+        alarmStatus[2] = 0;
+        digitalWrite(buzzer, HIGH); // Buzzer
+        digitalWrite(lightControl, LOW); // Led
+        delay(40000);
+        break;
+      }
     }
   }
   else if (alarmStatus[3] == 1)
@@ -837,21 +884,32 @@ void riseAlarm()
 
     while (true)
     {
+      digitalWrite(buzzer, LOW); // Buzzer
+      digitalWrite(lightControl, HIGH); // Led
+      delay(delayPeriod);
       buttonState = digitalRead(buttonThu);
       if (buttonState == HIGH)
       {
         // Box Opened Close Alarm
-        alarmStatus[3] == 0;
+        alarmStatus[3] = 0;
         digitalWrite(buzzer, HIGH); // Buzzer
         digitalWrite(lightControl, LOW); // Led
-        delay(10000);
+        delay(40000);
         break;
       }
-      digitalWrite(buzzer, LOW); // Buzzer
-      digitalWrite(lightControl, HIGH); // Led
-      delay(delayPeriod);
       digitalWrite(buzzer, HIGH); // Buzzer
       digitalWrite(lightControl, LOW); // Led
+      delay(delayPeriod);
+      buttonState = digitalRead(buttonThu);
+      if (buttonState == HIGH)
+      {
+        // Box Opened Close Alarm
+        alarmStatus[3] = 0;
+        digitalWrite(buzzer, HIGH); // Buzzer
+        digitalWrite(lightControl, LOW); // Led
+        delay(40000);
+        break;
+      }
     }
   }
   else if (alarmStatus[4] == 1)
@@ -860,24 +918,34 @@ void riseAlarm()
     digitalWrite(lightSetting1, LOW); // Lights 4
     digitalWrite(lightSetting2, LOW);
     digitalWrite(lightSetting3, HIGH);
-
     while (true)
     {
+      digitalWrite(buzzer, LOW); // Buzzer
+      digitalWrite(lightControl, HIGH); // Led
+      delay(delayPeriod);
       buttonState = digitalRead(buttonFri);
       if (buttonState == HIGH)
       {
         // Box Opened Close Alarm
-        alarmStatus[4] == 0;
+        alarmStatus[4] = 0;
         digitalWrite(buzzer, HIGH); // Buzzer
         digitalWrite(lightControl, LOW); // Led
-        delay(10000);
+        delay(40000);
         break;
       }
-      digitalWrite(buzzer, LOW); // Buzzer
-      digitalWrite(lightControl, HIGH); // Led
-      delay(delayPeriod);
       digitalWrite(buzzer, HIGH); // Buzzer
       digitalWrite(lightControl, LOW); // Led
+      delay(delayPeriod);
+      buttonState = digitalRead(buttonFri);
+      if (buttonState == HIGH)
+      {
+        // Box Opened Close Alarm
+        alarmStatus[4] = 0;
+        digitalWrite(buzzer, HIGH); // Buzzer
+        digitalWrite(lightControl, LOW); // Led
+        delay(40000);
+        break;
+      }
     }
   }
   else if (alarmStatus[5] == 1)
@@ -889,21 +957,32 @@ void riseAlarm()
 
     while (true)
     {
+      digitalWrite(buzzer, LOW); // Buzzer
+      digitalWrite(lightControl, HIGH); // Led
+      delay(delayPeriod);
       buttonState = digitalRead(buttonSat);
       if (buttonState == HIGH)
       {
         // Box Opened Close Alarm
-        alarmStatus[5] == 0;
+        alarmStatus[5] = 0;
         digitalWrite(buzzer, HIGH); // Buzzer
         digitalWrite(lightControl, LOW); // Led
-        delay(10000);
+        delay(40000);
         break;
       }
-      digitalWrite(buzzer, LOW); // Buzzer
-      digitalWrite(lightControl, HIGH); // Led
-      delay(delayPeriod);
       digitalWrite(buzzer, HIGH); // Buzzer
       digitalWrite(lightControl, LOW); // Led
+      delay(delayPeriod);
+      buttonState = digitalRead(buttonSat);
+      if (buttonState == HIGH)
+      {
+        // Box Opened Close Alarm
+        alarmStatus[5] = 0;
+        digitalWrite(buzzer, HIGH); // Buzzer
+        digitalWrite(lightControl, LOW); // Led
+        delay(40000);
+        break;
+      }
     }
   }
   else if (alarmStatus[6] == 1)
@@ -915,21 +994,32 @@ void riseAlarm()
 
     while (true)
     {
+      digitalWrite(buzzer, LOW); // Buzzer
+      digitalWrite(lightControl, HIGH); // Led
+      delay(delayPeriod);
       buttonState = digitalRead(buttonSun);
       if (buttonState == HIGH)
       {
         // Box Opened Close Alarm
-        alarmStatus[0] == 0;
+        alarmStatus[6] = 0;
         digitalWrite(buzzer, HIGH); // Buzzer
         digitalWrite(lightControl, LOW); // Led
-        delay(10000);
+        delay(40000);
         break;
       }
-      digitalWrite(buzzer, LOW); // Buzzer
-      digitalWrite(lightControl, HIGH); // Led
-      delay(delayPeriod);
       digitalWrite(buzzer, HIGH); // Buzzer
       digitalWrite(lightControl, LOW); // Led
+      delay(delayPeriod);
+      buttonState = digitalRead(buttonSun);
+      if (buttonState == HIGH)
+      {
+        // Box Opened Close Alarm
+        alarmStatus[6] = 0;
+        digitalWrite(buzzer, HIGH); // Buzzer
+        digitalWrite(lightControl, LOW); // Led
+        delay(40000);
+        break;
+      }
     }
   }
 }
