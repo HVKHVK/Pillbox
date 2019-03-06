@@ -71,14 +71,8 @@ void setup()
   if (TimeIsSet != 0xaa55)
   {
     RTC.stopClock();
-
-<<<<<<< HEAD
     RTC.fillByYMD(2019, 3, 6);
     RTC.fillByHMS(18, 56, 00);
-=======
-    RTC.fillByYMD(2019, 3, 1);
-    RTC.fillByHMS(22, 38, 20);
->>>>>>> origin/master
 
     RTC.setTime();
     TimeIsSet = 0xaa55;
