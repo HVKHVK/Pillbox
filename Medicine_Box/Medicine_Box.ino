@@ -72,8 +72,13 @@ void setup()
   {
     RTC.stopClock();
 
+<<<<<<< HEAD
     RTC.fillByYMD(2019, 3, 6);
     RTC.fillByHMS(18, 56, 00);
+=======
+    RTC.fillByYMD(2019, 3, 1);
+    RTC.fillByHMS(22, 38, 20);
+>>>>>>> origin/master
 
     RTC.setTime();
     TimeIsSet = 0xaa55;
@@ -279,10 +284,10 @@ void loop()
     int m4 = (int)m2 - 48;
     minData = m3 * 10 + m4;
     input = "";
-    Serial.println(comMsg);
-    Serial.println(dayOfWeek);
-    Serial.println(clockData);
-    Serial.println(minData);
+//    Serial.println(comMsg);
+//    Serial.println(dayOfWeek);
+//    Serial.println(clockData);
+//    Serial.println(minData);
 
     if (dayOfWeek == 1)
     {
